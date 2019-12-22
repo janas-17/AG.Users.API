@@ -1,4 +1,5 @@
-﻿using AG.Users.EFCore;
+﻿using AG.Users.Data.Services;
+using AG.Users.EFCore;
 using AG.Users.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,10 +12,22 @@ namespace AG.Users.Data.Users
 {
     public class OperatorRepo : ARepo<Operator, UsersContext>
     {
-        public OperatorRepo(UsersContext context) 
-            : base(context)
+        protected readonly OperatorValidationService operatorValidation;
+        public OperatorRepo(UsersContext context, UserValidationService<Operator> userValidation,
+            OperatorValidationService operatorValidation) : base(context, userValidation)
         {
+            this.operatorValidation = operatorValidation;
+        }
 
+        protected override bool saveValidationChecksSuccess(Operator entity)
+        {
+            bool validationSuccessful = base.saveValidationChecksSuccess(entity);
+
+            // If basic checks pass and this is an update (Id is not 0), do additional operator check
+            if (validationSuccessful && entity.Id != 0)
+                validationSuccessful = operatorValidation.operatorApproved(entity);
+
+            return validationSuccessful;
         }
     }
 }

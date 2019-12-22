@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AG.Users.API.HealthChecks;
+using AG.Users.Data.Services;
 using AG.Users.Data.Users;
 using AG.Users.EFCore;
+using AG.Users.EFCore.Models;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
@@ -37,6 +39,9 @@ namespace AG.Users.API
             services.AddDbContext<UsersContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("default")));
 
+            services.AddScoped<OperatorValidationService>();
+            services.AddScoped<UserValidationService<Operator>>();
+            services.AddScoped<UserValidationService<Administrator>>();
             services.AddScoped<OperatorRepo>();
             services.AddScoped<AdministratorRepo>();
 
