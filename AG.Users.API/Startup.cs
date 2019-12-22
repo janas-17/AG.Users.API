@@ -8,6 +8,7 @@ using AG.Users.Data.Users;
 using AG.Users.EFCore;
 using AG.Users.EFCore.Models;
 using HealthChecks.UI.Client;
+using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -68,6 +69,8 @@ namespace AG.Users.API
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
 
             app.UseSwaggerUI(c =>
             {

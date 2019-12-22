@@ -103,5 +103,19 @@ namespace AG.Users.Tests.Controllers
             await Assert.ThrowsAsync<Exception>(() => _client.PutAsync(request.Url,
                  new StringContent(JsonConvert.SerializeObject(request.Body), Encoding.Default, "application/json")));
         }
+
+        [Fact]
+        public async Task CanDeleteOperator()
+        {
+            var request = new
+            {
+                Url = "/api/operators/3",
+            };
+
+            var httpResponse = await _client.DeleteAsync(request.Url);
+
+            // Must be successful.
+            httpResponse.EnsureSuccessStatusCode();
+        }
     }
 }

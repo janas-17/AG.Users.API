@@ -1,3 +1,4 @@
+﻿@@ -0,0 +1,51 @@
 ﻿using AG.Users.EFCore;
 using AG.Users.EFCore.Models;
 using System;
@@ -6,6 +7,9 @@ using System.Text;
 
 namespace AG.Users.Tests
 {
+    /// <summary>
+    /// Used to seed in memory DbContext with test data
+    /// </summary>
     public static class DatabaseSeeder
     {
         public static void SeedTestData(UsersContext dbContext)
@@ -25,6 +29,14 @@ namespace AG.Users.Tests
                 FirstName = "Jane",
                 LastName = "Doe",
                 GameName = "jane",
+            });
+            dbContext.Set<Operator>().Add(new Operator()
+            {
+                Approved = true,
+                DateOfBirth = new DateTime(1966, 6, 6),
+                FirstName = "toDelete",
+                LastName = "toDelete",
+                GameName = "toDelete",
             });
 
             dbContext.Set<Administrator>().Add(new Administrator()
