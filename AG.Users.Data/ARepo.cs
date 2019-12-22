@@ -94,10 +94,11 @@ namespace AG.Users.Data
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        private bool saveValidationChecksSuccess(TEntity entity)
+        protected virtual bool saveValidationChecksSuccess(TEntity entity)
         {
             bool validationSuccessful = userValidation.ValidNameLength(entity.FirstName, entity.LastName);
 
+            // If valid post previous check, performa additional validation
             if (validationSuccessful)
                 validationSuccessful = userValidation.ValidAge(entity.DateOfBirth);
 

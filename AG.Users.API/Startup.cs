@@ -39,6 +39,7 @@ namespace AG.Users.API
             services.AddDbContext<UsersContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("default")));
 
+            services.AddScoped<OperatorValidationService>();
             services.AddScoped<UserValidationService<Operator>>();
             services.AddScoped<UserValidationService<Administrator>>();
             services.AddScoped<OperatorRepo>();

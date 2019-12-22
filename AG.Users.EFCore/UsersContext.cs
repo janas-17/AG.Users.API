@@ -14,6 +14,9 @@ namespace AG.Users.EFCore
         /// <summary>
         /// I assumed that given the common factors Operators and Administrators could be stored
         /// within a common structure, using a discriminator to differentiate between types
+        /// 
+        /// Possible improvement would be defining discriminator as enum with char db value
+        /// should the requirement of an additional User Type arise
         /// </summary>
         /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
