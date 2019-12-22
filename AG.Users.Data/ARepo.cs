@@ -1,4 +1,5 @@
-﻿using AG.Users.EFCore.Models;
+﻿using AG.Users.Data.Services;
+using AG.Users.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,15 +19,20 @@ namespace AG.Users.Data
         where TContext : DbContext
     {
         protected readonly TContext context;
+        protected readonly UserValidationService<TEntity> userValidation;
 
-        public ARepo(TContext context)
+        public ARepo(TContext context, UserValidationService<TEntity> userValidation)
         {
             this.context = context;
+            this.userValidation = userValidation;
         }
         public async Task<TEntity> Add(TEntity entity)
         {
-            context.Set<TEntity>().Add(entity);
-            await context.SaveChangesAsync();
+            if (saveValidationChecksSuccess(entity))
+            {
+                context.Set<TEntity>().Add(entity);
+                await context.SaveChangesAsync();
+            }
 
             return entity;
         }
@@ -74,10 +80,28 @@ namespace AG.Users.Data
 
         public async Task<TEntity> Update(TEntity entity)
         {
-            context.Entry(entity).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            if (saveValidationChecksSuccess(entity))
+            {
+                context.Entry(entity).State = EntityState.Modified;
+                await context.SaveChangesAsync();
+            }
 
             return entity;
+        }
+
+        /// <summary>
+        /// Validation checks that must occur for any user to save (insert or update)
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        private bool saveValidationChecksSuccess(TEntity entity)
+        {
+            bool validationSuccessful = userValidation.ValidNameLength(entity.FirstName, entity.LastName);
+
+            if (validationSuccessful)
+                validationSuccessful = userValidation.ValidAge(entity.DateOfBirth);
+
+            return validationSuccessful;
         }
 
     }

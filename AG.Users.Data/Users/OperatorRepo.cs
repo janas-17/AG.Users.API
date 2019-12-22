@@ -1,4 +1,5 @@
-﻿using AG.Users.EFCore;
+﻿using AG.Users.Data.Services;
+using AG.Users.EFCore;
 using AG.Users.EFCore.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,8 +12,8 @@ namespace AG.Users.Data.Users
 {
     public class OperatorRepo : ARepo<Operator, UsersContext>
     {
-        public OperatorRepo(UsersContext context) 
-            : base(context)
+        public OperatorRepo(UsersContext context, UserValidationService<Operator> userValidation) 
+            : base(context, userValidation)
         {
 
         }
